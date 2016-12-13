@@ -21,7 +21,7 @@ class dehydrated::install inherits dehydrated {
     }
   }
 
-  file { $etcdir:
+  file { "$etcdir":
     ensure => directory,
     owner  => $user,
     group  => $group,
