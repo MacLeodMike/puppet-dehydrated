@@ -17,7 +17,7 @@ class dehydrated::install inherits dehydrated {
       }
       file { '/usr/local/bin/dehydrated':
         ensure => 'link',
-        target => ${etcdir}/dehydrated,
+        target => "${etcdir}/dehydrated",
     }
   }
 
