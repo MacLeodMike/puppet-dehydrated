@@ -4,8 +4,8 @@ class dehydrated (
   $domains        = $dehydrated::params::domains,
   $user           = $dehydrated::params::user,
   $group          = $dehydrated::params::group,
-  $cron_enabled   = $dehydrated::params::apache_cron_integration,
-  $apache_enabled = $dehydrated::params::apache_integration,
+  $cron_enabled   = $dehydrated::params::apache_cron_enabled,
+  $apache_enabled = $dehydrated::params::apache_enabled,
   $apache_user    = $dehydrated::params::apache_user,
 
 ) inherits dehydrated::params {
