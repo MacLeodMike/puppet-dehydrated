@@ -12,11 +12,21 @@ define dehydrated::certificate (
     content => inline_template("<%= @name %> <%= @domains.reject { |name| name == @name }.join(' ') %>\n"),
   }
 
-  exec { 'refresh_certs':
-    path    => '/bin:/usr/bin:/usr/local/bin',
-    command => 'dehydrated -c',
-    unless  => "test -r ${dehydrated::libdir}/certs/${name}/cert.pem",
-    user    => $dehydrated::user,
+  if $apache_enabled {
+    exec { 'refresh_certs':
+      path    => '/bin:/usr/bin:/usr/local/bin',
+      command => 'dehydrated -c',
+      unless  => "test -r ${dehydrated::libdir}/certs/${name}/cert.pem",
+      user    => $dehydrated::user,
+      notify  => Service['httpd']
+    }
+  } else {
+    exec { 'refresh_certs':
+      path    => '/bin:/usr/bin:/usr/local/bin',
+      command => 'dehydrated -c',
+      unless  => "test -r ${dehydrated::libdir}/certs/${name}/cert.pem",
+      user    => $dehydrated::user,
+    }
   }
 
 }

@@ -137,6 +137,7 @@ Main class used to setup the system.
 
 * `user`: Specifies the user account used to manage certificates. Default: 'dehydrated'.
 * `group`: Specifies the group account used to manage certificates. Default: 'dehydrated'.
+* `staging_enabled`: Specifies whether to use the lets encrypt staging server. Default: 'false'.
 * `cron_enabled`: Specifies whether to setup cron to automatically renew certificates. Default: 'true'.
 * `apache_enabled`: Specifies whether to setup apache to serve the generated challenges. Default: 'false'.
 
