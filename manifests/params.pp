@@ -1,25 +1,24 @@
 class dehydrated::params {
-  $user = 'dehydrated'
-  $previous_user = 'letsencrypt'
-  $config = 'config'
+
+  $email          = undef
+  $domains        = undef
+  $user           = 'dehydrated'
+  $group          = 'dehydrated'
+  $cron_enabled   = true
+  $apache_enabled = false
 
   case $::osfamily {
     'Debian': {
       $apache_user = 'www-data'
-      $bin = '/home/dehydrated/dehydrated'
-      $etcdir = '/home/dehydrated'
-      $previous_etcdir = '/home/letsencrypt'
-      $package = undef
+      $etcdir = '/var/lib/dehydrated'
     }
     'FreeBSD': {
       $apache_user = 'www'
-      $bin = '/usr/local/bin/dehydrated'
       $etcdir = '/usr/local/etc/dehydrated'
-      $previous_etcdir = '/usr/local/etc/letsencrypt.sh'
-      $package = 'dehydrated'
     }
     default: {
       fail("unsupported osfamily: ${::osfamily}")
     }
   }
+
 }

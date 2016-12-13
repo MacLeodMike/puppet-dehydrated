@@ -1,12 +1,12 @@
-class dehydrated::apache {
-  include dehydrated
+class dehydrated::apache inherits dehydrated {
 
-  include apache
+  if $apache_enabled {
+    include ::apache
 
-  $etcdir = $dehydrated::etcdir
-
-  apache::custom_config { 'dehydrated':
-    ensure  => present,
-    content => template('dehydrated/apache_alias.conf.erb'),
+    apache::custom_config { 'dehydrated':
+      ensure  => present,
+      content => template('dehydrated/apache_alias.conf.erb'),
+    }
   }
+
 }

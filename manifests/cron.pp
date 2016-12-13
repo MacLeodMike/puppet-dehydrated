@@ -1,5 +1,6 @@
-class dehydrated::cron {
-  if $dehydrated::cron_integration {
+class dehydrated::cron inherits dehydrated {
+
+  if $cron_enabled {
     $ensure = 'present'
   } else {
     $ensure = 'absent'
@@ -7,13 +8,10 @@ class dehydrated::cron {
 
   case $::osfamily {
     'Debian': {
-      cron { 'weekly_letsencrypt':
-        ensure  => absent,
-      }
       cron { 'weekly_dehydrated':
         ensure  => $ensure,
-        command => "${dehydrated::bin} -c",
-        user    => $dehydrated::user,
+        command => "/usr/local/bin/dehydrated -c",
+        user    => $user,
         weekday => 0,
         hour    => 3,
         minute  => 30,
@@ -24,17 +22,15 @@ class dehydrated::cron {
         ensure => $ensure,
         path   => '/etc/periodic.conf',
         line   => 'weekly_dehydrated_enable="YES"',
-        match  => '^weekly_(letsencrypt|dehydrated)_enable=',
+        match  => '^weekly_dehydrated_enable=',
       }
       file_line { 'weekly_dehydrated_user':
         ensure => $ensure,
         path   => '/etc/periodic.conf',
-        line   => "weekly_dehydrated_user=\"${dehydrated::user}\"",
-        match  => '^weekly_(letsencrypt|dehydrated)_user=',
+        line   => "weekly_dehydrated_user=\"${user}\"",
+        match  => '^weekly_dehydrated_user=',
       }
     }
-    default: {
-      fail("Unsupported osfamily ${::osfamily}")
-    }
   }
+
 }

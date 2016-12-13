@@ -1,15 +1,17 @@
-class dehydrated::config {
-  file { "${dehydrated::etcdir}/${dehydrated::config}":
+class dehydrated::config inherits dehydrated {
+
+  file { "${etcdir}/config":
     ensure  => present,
-    owner   => $dehydrated::user,
-    group   => $dehydrated::user,
-    content => "CONTACT_EMAIL=${dehydrated::contact_email}\nWELLKNOWN=${dehydrated::etcdir}/.acme-challenges\n",
+    owner   => $user,
+    group   => $user,
+    content => "CONTACT_EMAIL=${contact_email}\nWELLKNOWN=${etcdir}/.acme-challenges\n",
   }
 
-  file { "${dehydrated::etcdir}/.acme-challenges":
-    ensure => directory,
-    owner  => $dehydrated::user,
-    group  => $dehydrated::user,
-    mode   => '0755',
+  concat { "${etcdir}/domains.txt":
+    ensure => present,
+    owner  => $user,
+    group  => $user,
+    mode   => '0644',
   }
+
 }

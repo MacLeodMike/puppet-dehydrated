@@ -1,47 +1,28 @@
 class dehydrated (
-  $contact_email,
 
-  $apache_integration = false,
-  $cron_integration = false,
+  $email          = $dehydrated::params::email,
+  $domains        = $dehydrated::params::domains,
+  $user           = $dehydrated::params::user,
+  $group          = $dehydrated::params::group,
+  $cron_enabled   = $dehydrated::params::apache_cron_integration,
+  $apache_enabled = $dehydrated::params::apache_integration,
+  $apache_user    = $dehydrated::params::apache_user,
 
-  $user = $dehydrated::params::user,
-  $previous_user = $dehydrated::params::previous_user,
-  $config = $dehydrated::params::config,
-  $apache_user = $dehydrated::params::apache_user,
-  $bin = $dehydrated::bin,
-  $etcdir = $dehydrated::etcdir,
-  $previous_etcdir = $dehydrated::previous_etcdir,
-  $package = $dehydrated::params::package,
 ) inherits dehydrated::params {
 
-  include dehydrated::user
-  if $package {
-    include dehydrated::package
+  validate_string($email)
+  validate_string($user)
+  validate_string($group)
+  validate_bool($cron_enabled)
+  validate_bool($apache_enabled)
+  validate_string($apache_user)
 
-    Class['dehydrated::user'] ->
-    Class['dehydrated::package'] ->
-    Class['dehydrated::config']
-  } else {
-    include dehydrated::repo
+  anchor { '::dehydrated::begin': } ->
+  class { '::dehydrated::user': } ->
+  class { '::dehydrated::install': } ->
+  class { '::dehydrated::config': } ->
+  class { '::dehydrated::cron': } ->
+  class { '::dehydrated::apache': } ->
+  anchor { '::dehydrated::end': }
 
-    Class['dehydrated::user'] ->
-    Class['dehydrated::repo'] ->
-    Class['dehydrated::config']
-  }
-  include dehydrated::config
-  include dehydrated::domains
-  include dehydrated::changed
-
-  Class['dehydrated::config'] ->
-  Class['dehydrated::domains'] ->
-  Class['dehydrated::changed']
-
-  Class['dehydrated::domains'] ~>
-  Class['dehydrated::changed']
-
-  if $apache_integration {
-    include dehydrated::apache
-  }
-
-  include dehydrated::cron
 }

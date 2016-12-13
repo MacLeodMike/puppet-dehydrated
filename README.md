@@ -1,5 +1,7 @@
 # dehydrated
 
+Forked from https://github.com/opus-codium/puppet-dehydrated
+
 #### Table of Contents
 
 1. [Module Description - What the module does and why it is useful](#module-description)
@@ -27,7 +29,7 @@ Let's encrypt needs a contact address that must be passed to the `dehydrated` cl
 
 ```puppet
 class { 'dehydrated':
-  contact_email => 'user@example.com',
+  email => 'user@example.com',
 }
 ```
 
@@ -41,7 +43,7 @@ After including the required `dehydrated` class, each `dehydrated::certificate` 
 
 ```puppet
 class { 'dehydrated':
-  contact_email => 'user@example.com',
+  email => 'user@example.com',
 }
 
 dehydrated::certificate { 'example.com':
@@ -54,7 +56,7 @@ A `dehydrated::certificate` can use the `domain` parameter to indicate Subject A
 
 ```puppet
 class { 'dehydrated':
-  contact_email => 'user@example.com',
+  email => 'user@example.com',
 }
 
 dehydrated::certificate { 'example.com':
@@ -68,18 +70,18 @@ dehydrated::certificate { 'example.com':
 
 ### Renewing certificates with cron
 
-The `cron_integration` parameter of the `dehydrated` class configures cron to renew certificates before they expire.
+The `cron_enabled` parameter of the `dehydrated` class configures cron to renew certificates before they expire.
 
 ```puppet
 class { 'dehydrated':
-  contact_email    => 'user@example.com',
-  cron_integration => true,
+  email    => 'user@example.com',
+  cron_enabled => true,
 }
 ```
 
 ### Serving challenges with Apache
 
-The `apache_integration` parameter of the `dehydrated` class configures apache to serve the challenges used for domain validation.
+The `apache_enabled` parameter of the `dehydrated` class configures [apache](https://forge.puppet.com/puppetlabs/apache) to serve the challenges used for domain validation.
 
 The following example redirect all HTTP requests to HTTPS except those related to letsencrypt's validation:
 
@@ -87,8 +89,8 @@ The following example redirect all HTTP requests to HTTPS except those related t
 include ::apache
 
 class { 'dehydrated':
-  contact_email      => 'user@example.com',
-  apache_integration => true,
+  email      => 'user@example.com',
+  apache_enabled => true,
 }
 
 apache::vhost { 'main':
@@ -111,16 +113,7 @@ apache::vhost { 'main':
 
 ### Handling the *letsencrypt.sh* to *dehydrated* transition
 
-Because of a violation of Let's Encrypts trademark policy (i.e. « If you do something better than us, please do not use our name: this would confuse our users who prefer to have our inefficient code and may use your efficient one without knowing »), the *letsencrypt\_sh* project was renamed to *dehydrated*.  This Puppet module was originally named *puppet-letsencrypt\_sh* for consistency, and also for consistency, has been renamed to *puppet-dehydrated*.  If you used the previous module, here is how to migrate!
-
-1. Update your repository to get the latest code of this modules (e.g. through r10k), and change the module name in your manifest.  For now, **do not** change the certificates path;
-2. Apply your new catalog (old data will be moved, appropriate user accounts will be created or removed, and a symlink will make everything accessible as previously);
-3. Update your Puppet configuration for the certificates to be found in their new location;
-4. Apply your updated catalog once more.
-
-The symlink is not needed anymore, but is not handled by the module.  You can remove it if you wish.
-
-## Reference
+This module assumes you're starting from scratch and not migrating from letsencrypt.sh. It makes no attempt to migrate your configuration.
 
 ### Classes
 
@@ -138,13 +131,14 @@ Main class used to setup the system.
 
 ##### Required parameters
 
-* `contact_email`: The e-mail address Let's Encrypt can use to reach you regarding your certificates.
+* `email`: The e-mail address Let's Encrypt can use to reach you regarding your certificates.
 
 ##### Optional parameters
 
-* `apache_integration`: Specifies whether to setup apache to serve the generated challenges. Default: 'false'.
-* `cron_integration`: Specifies whether to setup cron to automatically renew certificates. Default: 'false'.
 * `user`: Specifies the user account used to manage certificates. Default: 'dehydrated'.
+* `group`: Specifies the group account used to manage certificates. Default: 'dehydrated'.
+* `cron_enabled`: Specifies whether to setup cron to automatically renew certificates. Default: 'true'.
+* `apache_enabled`: Specifies whether to setup apache to serve the generated challenges. Default: 'false'.
 
 #### Defined Type: `dehydrated::certificate`
 

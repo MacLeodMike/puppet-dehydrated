@@ -1,0 +1,25 @@
+{
+  "name": "puppet-dehydrated",
+  "version": "0.0.1",
+  "author": "Michael MacLeod",
+  "license": "GPLv3",
+  "summary": "A module for dehydrated",
+  "source": "https://github.com/MacLeodMike/puppet-dehydrated",
+  "project_page": "https://github.com/MacLeodMike/puppet-dehydrated",
+  "issues_url": "https://github.com/MacLeodMike/puppet-dehydrated/issues",
+  "tags": ["letsencrypt","dehydrated"],
+  "dependencies": [
+    { "name": "puppetlabs-stdlib", "version_range": ">= 1.0.0" },
+    { "name": "puppetlabs-vcsrepo", "version_range": ">=1.0.0" },
+    { "name": "puppetlabs-concat", "version_range": ">=1.1.0"
+  ],
+  "requirements": [
+    { "name": "puppet", "version_requirement": ">=3.0.0 <5.0.0" }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [ "16.04", "14.04" ]
+    }
+  ]
+}
