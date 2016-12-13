@@ -1,4 +1,4 @@
-define dehydrated::certificate inherits dehydrated {
+class dehydrated::certificate inherits dehydrated {
 
   concat::fragment { "${dehydrated::etcdir}/domains.txt-${name}":
     target  => "${dehydrated::etcdir}/domains.txt",
