@@ -1,4 +1,4 @@
-class dehydrated::certificate inherits dehydrated {
+define dehydrated::certificate {
 
   concat::fragment { "${dehydrated::etcdir}/domains.txt-${name}":
     target  => "${dehydrated::etcdir}/domains.txt",
@@ -7,7 +7,7 @@ class dehydrated::certificate inherits dehydrated {
 
   exec { 'dehydrated':
     command => 'true',
-    unless  => "test -r ${etcdir}/certs/${name}/cert.pem",
+    unless  => "test -r ${dehydrated::etcdir}/certs/${name}/cert.pem",
     path    => '/bin:/usr/bin',
     user    => $dehydrated::user,
   }
