@@ -18,10 +18,11 @@ class dehydrated::install inherits dehydrated {
       file { '/usr/local/bin/dehydrated':
         ensure => 'link',
         target => "${etcdir}/dehydrated",
+      }
     }
   }
 
-  file { "$etcdir":
+  file { $etcdir:
     ensure => directory,
     owner  => $user,
     group  => $group,
