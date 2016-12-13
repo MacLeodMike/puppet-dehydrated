@@ -12,7 +12,7 @@ define dehydrated::certificate (
     content => inline_template("<%= @name %> <%= @domains.reject { |name| name == @name }.join(' ') %>\n"),
   }
 
-  if $apache_enabled {
+  if ${dehydrated::apache_enabled} {
     exec { 'refresh_certs':
       path    => '/bin:/usr/bin:/usr/local/bin',
       command => 'dehydrated -c',
