@@ -14,7 +14,7 @@ class dehydrated::config inherits dehydrated {
     mode   => '0644',
   }
 
-  file { "${docroot}/.acme-challenges":
+  file { "${libdir}/.acme-challenges":
     ensure => directory,
     owner  => $user,
     group  => $user,
