@@ -10,12 +10,12 @@ define dehydrated::certificate (
   concat::fragment { "${dehydrated::libdir}/domains.txt-${name}":
     target  => "${dehydrated::libdir}/domains.txt",
     content => inline_template("<%= @name %> <%= @domains.reject { |name| name == @name }.join(' ') %>\n"),
+    notify  => Exec['refresh_certs'],
   }
 
-  exec { 'dehydrated-${name}':
-    command => 'true',
-    unless  => "test -r ${dehydrated::libdir}/certs/${name}/cert.pem",
-    path    => '/bin:/usr/bin',
+  exec { 'refresh_certs':
+    path    => '/usr/local/bin',
+    command => 'dehydrated -c',
     user    => $dehydrated::user,
   }
 
