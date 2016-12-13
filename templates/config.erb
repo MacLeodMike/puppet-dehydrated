@@ -46,7 +46,7 @@ CA="https://acme-staging.api.letsencrypt.org/directory"
 #ACCOUNTDIR="${BASEDIR}/accounts"
 
 # Output directory for challenge-tokens to be served by webserver or deployed in HOOK (default: /var/www/dehydrated)
-WELLKNOWN="<%= scope['::dehydrated::etcdir'] %>/.acme-challenges"
+WELLKNOWN="<%= scope['::dehydrated::libdir'] %>/.acme-challenges"
 
 # Default keysize for private keys (default: 4096)
 #KEYSIZE="4096"
