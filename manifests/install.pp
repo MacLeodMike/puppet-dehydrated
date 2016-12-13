@@ -7,7 +7,7 @@ class dehydrated::install inherits dehydrated {
       }
     }
     'Debian': {
-      vcsrepo { $etcdir:
+      vcsrepo { $libdir:
         ensure   => present,
         provider => 'git',
         source   => 'https://github.com/lukas2511/dehydrated.git',
@@ -17,23 +17,16 @@ class dehydrated::install inherits dehydrated {
       }
       file { '/usr/local/bin/dehydrated':
         ensure => 'link',
-        target => "${etcdir}/dehydrated",
+        target => "${libdir}/dehydrated",
       }
     }
   }
 
-  file { $etcdir:
+  file { $libdir:
     ensure => directory,
     owner  => $user,
     group  => $group,
     mode   => '0710',
-  }
-
-  file { "${etcdir}/.acme-challenges":
-    ensure => directory,
-    owner  => $user,
-    group  => $user,
-    mode   => '0755',
   }
 
 }

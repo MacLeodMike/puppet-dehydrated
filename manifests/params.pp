@@ -9,12 +9,12 @@ class dehydrated::params {
 
   case $::osfamily {
     'Debian': {
+      $libdir      = '/var/lib/dehydrated'
       $apache_user = 'www-data'
-      $etcdir = '/var/lib/dehydrated'
     }
     'FreeBSD': {
+      $libdir      = '/usr/local/etc/dehydrated'
       $apache_user = 'www'
-      $etcdir = '/usr/local/etc/dehydrated'
     }
     default: {
       fail("unsupported osfamily: ${::osfamily}")
