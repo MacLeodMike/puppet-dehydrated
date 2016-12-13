@@ -4,7 +4,7 @@ class dehydrated::config inherits dehydrated {
     ensure  => present,
     owner   => $user,
     group   => $user,
-    content => "CONTACT_EMAIL=${contact_email}\nWELLKNOWN=${etcdir}/.acme-challenges\n",
+    content => template('dehydrated/config.erb'),
   }
 
   concat { "${etcdir}/domains.txt":
