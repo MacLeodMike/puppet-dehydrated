@@ -81,18 +81,17 @@ class { 'dehydrated':
 
 ### Serving challenges with Apache
 
-The `apache_enabled` parameter of the `dehydrated` class configures [apache](https://forge.puppet.com/puppetlabs/apache) to serve the challenges used for domain validation.
+The module can be integrated with the [puppetlabs apache](https://forge.puppet.com/puppetlabs/apache) module to serve the challenges used for domain validation.
 
-The following example redirect all HTTP requests to HTTPS except those related to letsencrypt's validation:
+The following example redirects all HTTP requests to HTTPS except those related to letsencrypt's validation:
 
 ```puppet
-include ::apache
 
 class { 'dehydrated':
   email      => 'user@example.com',
-  apache_enabled => true,
 }
 
+include ::apache
 apache::vhost { 'main':
   port           => 80,
   default_vhost  => true,
@@ -109,6 +108,17 @@ apache::vhost { 'main':
     },
   ],
 }
+apache::custom_config { 'dehydrated':
+  source => "puppet:///modules/profiles/dehydrated/apache_alias.conf",
+}
+```
+
+```puppet
+Alias /.well-known/acme-challenge/ /var/lib/dehydrated/.acme-challenges/
+
+<Directory /var/lib/dehydrated/.acme-challenges>
+    Require all granted
+</Directory>
 ```
 
 ### Handling the *letsencrypt.sh* to *dehydrated* transition
@@ -139,7 +149,6 @@ Main class used to setup the system.
 * `group`: Specifies the group account used to manage certificates. Default: 'dehydrated'.
 * `staging_enabled`: Specifies whether to use the lets encrypt staging server. Default: 'false'.
 * `cron_enabled`: Specifies whether to setup cron to automatically renew certificates. Default: 'true'.
-* `apache_enabled`: Specifies whether to setup apache to serve the generated challenges. Default: 'false'.
 
 #### Defined Type: `dehydrated::certificate`
 
