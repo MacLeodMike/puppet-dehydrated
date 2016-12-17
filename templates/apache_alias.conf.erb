@@ -1,0 +1,5 @@
+Alias /.well-known/acme-challenge/ <%= scope['::dehydrated::libdir'] %>/.acme-challenges/
+
+<Directory <%= scope['::dehydrated::libdir'] %>/.acme-challenges>
+    Require all granted
+</Directory>

@@ -1,17 +1,7 @@
-define dehydrated::certificate (
-
-  Array $domains = undef,
-
-) {
+define dehydrated::refresh_certs {
 
   if ! defined(Class['dehydrated']) {
     fail('You must include the dehydrated base class before using any dehydrated defined resources')
-  }
-
-  concat::fragment { $name:
-    target  => "${dehydrated::libdir}/domains.txt",
-    content => inline_template("<%= @name %> <%= @domains.reject { |name| name == @name }.join(' ') %>\n"),
-    notify  => Exec['refresh_certs']
   }
 
   exec { 'refresh_certs':
@@ -19,6 +9,7 @@ define dehydrated::certificate (
     command     => 'dehydrated -c',
     user        => $dehydrated::user,
     refreshonly => true,
-  }
+    require     => Service['httpd'],
+  } ~> Service['httpd']
 
 }

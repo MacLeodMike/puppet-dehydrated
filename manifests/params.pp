@@ -4,6 +4,7 @@ class dehydrated::params {
   $domains         = undef
   $user            = 'dehydrated'
   $group           = 'dehydrated'
+  $challenge_type  = 'http-01'
   $staging_enabled = false
   $cron_enabled    = true
 
